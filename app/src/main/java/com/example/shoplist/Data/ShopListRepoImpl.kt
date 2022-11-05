@@ -13,6 +13,13 @@ object ShopListRepoImpl:ItemRepository {
         }
         shopList.add(shoppingItem)
     }
+    init {
+        for (i in 0 until 10)
+        {
+            val item = ShoppingItem("Name + $i",i, true)
+            addShoppingItem(item)
+        }
+    }
 
     override fun changeShoppingItem(shoppingItem: ShoppingItem) {
         val oldShopItemElement  = getShoppingItem(shoppingItem.id)
