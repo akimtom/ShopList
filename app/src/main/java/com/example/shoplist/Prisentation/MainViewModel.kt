@@ -13,19 +13,15 @@ class MainViewModel: ViewModel() {
     private val deleteShoppingItemUse = DeleteShoppingItemUseCase(repository)
     private val changeShoppingItemUse = ChangeShoppingItemUseCase(repository)
 
-    val shopList = MutableLiveData<List<ShoppingItem>>()
+    val shopList = getShopListUseCase.getShoppingList()
 
-    fun getShopList()
-    {
-        val list = getShopListUseCase.getShoppingList()
-        shopList.value = list
-    }
+
 
     fun deleteShopItemInShopList( shoppingItem: ShoppingItem)
     {
 
         deleteShoppingItemUse.deleteShoppingItem(shoppingItem)
-        getShopList()
+
     }
 
     //Возможно сдесь написан Бред
@@ -34,7 +30,9 @@ class MainViewModel: ViewModel() {
 
         shoppingItem.isActive = !shoppingItem.isActive
         changeShoppingItemUse.changeShoppingItem(shoppingItem)
-        getShopList()
+
     }
+
+
 
 }
