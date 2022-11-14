@@ -25,11 +25,11 @@ class MainViewModel: ViewModel() {
     }
 
     //Возможно сдесь написан Бред
-    fun changeShoppingItem(shoppingItem: ShoppingItem)
+    fun changeShoppingItem( shoppingItem: ShoppingItem)
     {
 
-        shoppingItem.isActive = !shoppingItem.isActive
-        changeShoppingItemUse.changeShoppingItem(shoppingItem)
+      val  newShoppingItem = shoppingItem.copy(isActive = !shoppingItem.isActive)
+        changeShoppingItemUse.changeShoppingItem(newShoppingItem)
 
     }
 

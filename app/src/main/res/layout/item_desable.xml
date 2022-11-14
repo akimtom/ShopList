@@ -15,17 +15,18 @@
         android:id="@+id/card_w"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        app:cardUseCompatPadding="true"
         app:cardBackgroundColor="#B29ADD"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:cardCornerRadius="6dp"
-        app:cardElevation="4dp"
+        app:cardElevation="1dp"
+
       >
 
         <TextView
 
-            android:id="@+id/item_name_d"
+            android:id="@+id/item_name_a"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
@@ -36,7 +37,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/count_item_d"
+            android:id="@+id/count_item_a"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
