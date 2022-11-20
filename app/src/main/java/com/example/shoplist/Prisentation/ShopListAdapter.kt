@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoplist.Domain.ShoppingItem
 import com.example.shoplist.R
@@ -18,8 +19,11 @@ class ShopListAdapter() :
 
     var shopList = listOf<ShoppingItem>()
         set(value) {
+            val diffCallback = DiffUtilCallback(shopList,value)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
+            diffResult.dispatchUpdatesTo(this)
             field = value
-            notifyDataSetChanged()
+
         }
     var onShopItemLongClickListener: ((ShoppingItem) -> Unit?)? = null
     var onShoppingItemClickListener:((ShoppingItem)->Unit?)? = null
