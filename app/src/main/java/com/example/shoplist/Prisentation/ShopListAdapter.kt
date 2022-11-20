@@ -15,13 +15,15 @@ class ShopListAdapter() :
 
 
     RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>() {
-    val ACTIVE_ITEM = 1
-    val DISABLE_ITEM  = 2
+
     var shopList = listOf<ShoppingItem>()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
+    var onShopItemLongClickListener: ((ShoppingItem) -> Unit?)? = null
+    var onShoppingItemClickListener:((ShoppingItem)->Unit?)? = null
+    var onSwipeShoppingItem:((ShoppingItem)->Unit?)?=null
 
     inner class ShopItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val itemName = itemView.findViewById<TextView>(R.id.item_name_a)
@@ -59,7 +61,12 @@ class ShopListAdapter() :
             itemCount.text = shopItem.count.toString()
         }
         holder.itemView.setOnLongClickListener {
+            onShopItemLongClickListener?.invoke(shopItem)
             true
+        }
+        holder.itemView.setOnClickListener{
+            onShoppingItemClickListener?.invoke(shopItem)
+
         }
 
 
@@ -78,5 +85,10 @@ class ShopListAdapter() :
 
     override fun getItemCount(): Int {
         return shopList.size
+    }
+
+    companion object{
+       const val ACTIVE_ITEM = 1
+       const val DISABLE_ITEM  = 2
     }
 }

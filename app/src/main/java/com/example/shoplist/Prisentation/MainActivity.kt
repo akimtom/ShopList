@@ -1,5 +1,7 @@
 package com.example.shoplist.Prisentation
 
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +9,7 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoplist.Domain.DeleteShoppingItemUseCase
 import com.example.shoplist.Domain.ShoppingItem
@@ -19,7 +22,8 @@ class MainActivity : AppCompatActivity() {
     private var count =0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        var canvas:Canvas
+        var draw:Drawable
         setContentView(R.layout.activity_main)
         setupRecyclerView()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
@@ -36,7 +40,29 @@ class MainActivity : AppCompatActivity() {
     {
         val  rcViewShopList =findViewById<RecyclerView>(R.id.RecyV)
         shopListAdapter = ShopListAdapter()
+        val swipeAndDel = object : SwipeAndDel() {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val item = shopListAdapter.shopList[viewHolder.adapterPosition]
+                viewModel.deleteShopItemInShopList(item)
+            }
+
+        }
+        val itemTouchHelper = ItemTouchHelper(swipeAndDel)
+        shopListAdapter.onSwipeShoppingItem = {
+            viewModel.deleteShopItemInShopList(it)
+        }
+        itemTouchHelper.attachToRecyclerView(rcViewShopList)
         rcViewShopList.adapter = shopListAdapter
+        rcViewShopList.recycledViewPool.setMaxRecycledViews(ShopListAdapter.ACTIVE_ITEM,5)
+        rcViewShopList.recycledViewPool.setMaxRecycledViews(ShopListAdapter.DISABLE_ITEM,5)
+        shopListAdapter.onShopItemLongClickListener = {
+        viewModel.changeShoppingItem(it)
+        }
+        shopListAdapter.onShoppingItemClickListener = {
+            viewModel.editShoppingItem(it)
+
+        }
+
     }
     /*private fun showItemList(list: List<ShoppingItem>) {
         linearLayout.removeAllViews()
