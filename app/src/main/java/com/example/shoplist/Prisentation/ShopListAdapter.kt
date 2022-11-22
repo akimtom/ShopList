@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoplist.Domain.ShoppingItem
 import com.example.shoplist.R
@@ -15,16 +16,9 @@ import com.example.shoplist.R
 class ShopListAdapter() :
 
 
-    RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>() {
+    ListAdapter<ShoppingItem,ShopListAdapter.ShopItemViewHolder>(DiffUtilCallBeckItem()) {
 
-    var shopList = listOf<ShoppingItem>()
-        set(value) {
-            val diffCallback = DiffUtilCallback(shopList,value)
-            val diffResult = DiffUtil.calculateDiff(diffCallback)
-            diffResult.dispatchUpdatesTo(this)
-            field = value
 
-        }
     var onShopItemLongClickListener: ((ShoppingItem) -> Unit?)? = null
     var onShoppingItemClickListener:((ShoppingItem)->Unit?)? = null
     var onSwipeShoppingItem:((ShoppingItem)->Unit?)?=null
@@ -53,7 +47,7 @@ class ShopListAdapter() :
     }
 
     override fun onBindViewHolder(holder: ShopItemViewHolder, position: Int) {
-        val shopItem = shopList[position]
+        val shopItem = getItem(position)
         val status = if(shopItem.isActive)
             "Active"
         else
@@ -79,7 +73,7 @@ class ShopListAdapter() :
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if(shopList[position].isActive)
+        return if(getItem(position).isActive)
             ACTIVE_ITEM
         else
             DISABLE_ITEM
@@ -87,9 +81,7 @@ class ShopListAdapter() :
     }
 
 
-    override fun getItemCount(): Int {
-        return shopList.size
-    }
+
 
     companion object{
        const val ACTIVE_ITEM = 1

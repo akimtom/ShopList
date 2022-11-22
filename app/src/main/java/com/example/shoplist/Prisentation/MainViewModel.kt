@@ -27,7 +27,7 @@ class MainViewModel: ViewModel() {
 
     }
 
-    //Возможно сдесь написан Бред
+
     fun changeShoppingItem( shoppingItem: ShoppingItem)
     {
 

@@ -1,5 +1,6 @@
 package com.example.shoplist.Prisentation
 
+import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
@@ -14,23 +15,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.shoplist.Domain.DeleteShoppingItemUseCase
 import com.example.shoplist.Domain.ShoppingItem
 import com.example.shoplist.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var shopListAdapter: ShopListAdapter
-    private var count =0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var canvas:Canvas
-        var draw:Drawable
+
         setContentView(R.layout.activity_main)
         setupRecyclerView()
+        val buttonAddShoppingItem = findViewById<FloatingActionButton>(R.id.add_item_button)
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.shopList.observe(this){
 
-        shopListAdapter.shopList = it
-
+        shopListAdapter.submitList( it)
+        buttonAddShoppingItem.setOnClickListener {
+            val intent = Intent(this,ShoppingItemActivity::class.java)
+            intent.putExtra("extra_mode","mode_add")
+            startActivity(intent)
+        }
 
 
         }
@@ -42,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         shopListAdapter = ShopListAdapter()
         val swipeAndDel = object : SwipeAndDel() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val item = shopListAdapter.shopList[viewHolder.adapterPosition]
+                val item = shopListAdapter.currentList[viewHolder.adapterPosition]
                 viewModel.deleteShopItemInShopList(item)
             }
 
@@ -57,6 +63,7 @@ class MainActivity : AppCompatActivity() {
         rcViewShopList.recycledViewPool.setMaxRecycledViews(ShopListAdapter.DISABLE_ITEM,5)
         shopListAdapter.onShopItemLongClickListener = {
         viewModel.changeShoppingItem(it)
+
         }
         shopListAdapter.onShoppingItemClickListener = {
             viewModel.editShoppingItem(it)
