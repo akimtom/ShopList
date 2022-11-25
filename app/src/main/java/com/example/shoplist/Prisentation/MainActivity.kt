@@ -12,8 +12,8 @@ import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.shoplist.Domain.DeleteShoppingItemUseCase
-import com.example.shoplist.Domain.ShoppingItem
+
+import com.example.shoplist.Prisentation.ShoppingItemActivity.Companion.newIntentChangeItem
 import com.example.shoplist.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -28,18 +28,19 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setupRecyclerView()
         val buttonAddShoppingItem = findViewById<FloatingActionButton>(R.id.add_item_button)
+        buttonAddShoppingItem.setOnClickListener {
+            val intent = ShoppingItemActivity.newIntentAddItem(this)
+            startActivity(intent)
+        }
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.shopList.observe(this){
 
         shopListAdapter.submitList( it)
-        buttonAddShoppingItem.setOnClickListener {
-            val intent = Intent(this,ShoppingItemActivity::class.java)
-            intent.putExtra("extra_mode","mode_add")
-            startActivity(intent)
-        }
+
 
 
         }
+        setupItemClickListener()
         
     }
     private fun setupRecyclerView()
@@ -65,29 +66,17 @@ class MainActivity : AppCompatActivity() {
         viewModel.changeShoppingItem(it)
 
         }
-        shopListAdapter.onShoppingItemClickListener = {
-            viewModel.editShoppingItem(it)
 
-        }
+
 
     }
-    /*private fun showItemList(list: List<ShoppingItem>) {
-        linearLayout.removeAllViews()
-        for ( item in list)
-        {
-            val layoutId  = if(item.isActive)
-            {
-                R.layout.item_active
-            }
-            else
-                R.layout.item_desable
-
-            val view = LayoutInflater.from(this).inflate(layoutId,linearLayout,false)
-            val itemName = view.findViewById<TextView>(R.id.item_name_a)
-            val itemCount = view.findViewById<TextView>(R.id.count_item_a)
-
-            linearLayout.addView(view)
+    private fun  setupItemClickListener()
+    {
+        shopListAdapter.onShoppingItemClickListener = {
+            val intent = newIntentChangeItem(this,it.id)
+           startActivity(intent)
         }
+    }
 
-    }*/
+
 }

@@ -35,15 +35,7 @@ class MainViewModel: ViewModel() {
         changeShoppingItemUse.changeShoppingItem(newShoppingItem)
 
     }
-    fun editShoppingItem(shoppingItem: ShoppingItem)
-    {
-        var intent = Intent()
-        intent.putExtra("name",shoppingItem.name)
-        intent.putExtra("count",shoppingItem.count)
-        intent.putExtra("Active",shoppingItem.isActive)
-        Log.d("Shopp", shoppingItem.count.toString())
 
-    }
 
 
 

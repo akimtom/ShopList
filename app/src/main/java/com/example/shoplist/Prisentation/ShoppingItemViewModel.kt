@@ -18,11 +18,11 @@ class ShoppingItemViewModel:ViewModel() {
 
     private val _errorInputName = MutableLiveData<Boolean>()
 
-  private val errorInputName:LiveData<Boolean>
+   val errorInputName:LiveData<Boolean>
     get() = _errorInputName
 
   private  val _errorInputCount = MutableLiveData<Boolean>()
-     private val errorInputCount : LiveData<Boolean>
+      val errorInputCount : LiveData<Boolean>
     get() = _errorInputCount
 
     private val  _shopItem = MutableLiveData<ShoppingItem>()
